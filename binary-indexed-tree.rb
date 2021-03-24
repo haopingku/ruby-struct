@@ -9,7 +9,7 @@ class BinaryIndexedTree
         add(i, a[i])
       end
     else
-      raise(ArgumentError, 'Need to be either a number or an array.')
+      raise(ArgumentError, 'Need a number or an array.')
     end
   end
 
