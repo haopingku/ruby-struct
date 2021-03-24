@@ -6,14 +6,14 @@ class BinaryIndexedTree
     when Array
       @a = Array.new(a.size + 1, 0)
       for i in 0 ... @a.size
-        update(i, a[i])
+        add(i, a[i])
       end
     else
       raise(ArgumentError, 'Need to be either a number or an array.')
     end
   end
 
-  def update i, v
+  def add i, v
     i += 1
     while i < @a.size
       @a[i] += v
