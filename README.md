@@ -2,19 +2,41 @@
 A simple library of implementations of common data structures and algorithms
 that are not in the built-in library.
 
-## Binary Indexed Tree (class)
+## Binary Indexed Tree
 
+- `#initialize(a)` to initialize. `a` can be an array or the size.
 - `#add(index, value)` to add value to the `index`.
-- `#sum(index)` to get the sum from index 0 to `index`.
+- `#sum(index)` to get the sum from index `0` to `index`.
 
-## Disjoint Set (class)
+### Example
+Get sum from range `i` to `j` (include `j`).
+
+```ruby
+bit = BinaryIndexedTree.new([5, 1, 4, 2, 3])
+i, j = ...
+bit.sum(j) - (i > 0 ? bit.sum(i) : 0)
+```
+
+## Disjoint Set
 A disjoint set (aka union find) of N nodes.
 
-- `#initialize(n)` to initialize a set with node id from 0 to n - 1.
-- `#find(i)` to find the set index (integer) of node i.
+- `#initialize(n)` to initialize a set with node id from `0` to `n - 1`.
+- `#find(i)` to find the set index (integer) of node `i`.
 - `#union(i, j)` to union two nodes.
 
-## Priority Queue (class)
+### Example
+Find groups of connected vertices in a graph.
+
+```ruby
+edges = [[0,1],[1,4],[2,5]]
+ds = DisjointSet.new(6)
+for i, j in edges
+  ds.union(i, j)
+end
+p (0...6).group_by{|i| ds.find(i)}.values # [[0, 1, 4], [2, 5], [3]]
+```
+
+## Priority Queue
 A priority queue for getting minimum element in logN time.
 
 - `#size`
@@ -22,7 +44,33 @@ A priority queue for getting minimum element in logN time.
 - `#top` to get the top element, this will not pop the element.
 - `#pop` to pop and return the top element.
 
-## Sorted Hash (class)
+### Example
+Priority queue for getting the largest numbers.
+
+```ruby
+q = PriorityQueue.new
+(0...100).each{ q << -rand(0xff) }
+while i = q.pop; p -i; end # print in decreasing order
+```
+
+## Segment Tree
+[Segment tree](https://en.wikipedia.org/wiki/Segment_tree) for updating and range query in log time complexity.
+
+- `#initialize(size, init_value = 0, &merge = nil)` to initialize a segment tree, `merge` is defaulted to sum function. `merge` is called when merging two children nodes to their parent node.
+- `#update(index, value)` to update a value in `index`.
+- `#query(range)` to query a result (range is in `Range` class).
+
+### Example
+A minimal segment tree. (If the element could be array, use
+`{|i, j| (i <=> j) < 1 ? i : j` instead.)
+
+```ruby
+st = SegmentTree.new(a.size, Float::INFINITY){|i, j| i < j ? i : j}
+(0...100).each{|i| st.update(i, rand(0xff)) }
+st.query(42..74)
+```
+
+## Sorted Hash
 A red-black tree for key-sorted key-value pairs. Methods below are similar to `Hash`.
 
 - `#initialize(default = nil, &default_proc = nil)`
@@ -41,6 +89,6 @@ A red-black tree for key-sorted key-value pairs. Methods below are similar to `H
 ## Z Algorithm
 Z algorithm calculates Z array for a string `str`, which `z[i]` stores the length of the longest common prefix of `str` and `str[i..]`. See [geeksforgeeks](https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/) and [codeforces](https://codeforces.com/blog/entry/3107) for more explanation.
 
-Notice the `z[0]` is meaningless by its nature, in the code it's set to be 0.
+Notice the `z[0]` is meaningless by its nature, in the code it's set to be `0`.
 
-- `#get_z_array(string)`
+- `get_z_array(str)`
