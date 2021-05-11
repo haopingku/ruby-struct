@@ -17,6 +17,14 @@ i, j = ...
 bit.sum(j) - (i > 0 ? bit.sum(i) : 0)
 ```
 
+## Directed Graph
+Methods for directed graphs. (`n` amount of vertices, `edges` array of direct edges e.g. `[[0,1],[1,2]]`.)
+
+- `dfs_traverse(n, edges)` to DFS-traverse in a graph.
+- `get_topological_order(n, edges)` to get a valid topological order.
+- `is_cyclic?(n, edges)` to detect if it is a cyclic graph.
+
+
 ## Disjoint Set
 A disjoint set (aka union find) of N nodes.
 
@@ -37,7 +45,7 @@ p (0...6).group_by{|i| ds.find(i)}.values # [[0, 1, 4], [2, 5], [3]]
 ```
 
 ## Priority Queue
-A priority queue for getting minimum element in logN time.
+A priority queue for getting the minimum element in log N time.
 
 - `#size`
 - `#insert(element)` to insert any object to the priority queue.
@@ -89,6 +97,6 @@ A red-black tree for key-sorted key-value pairs. Methods below are similar to `H
 ## Z Algorithm
 Z algorithm calculates Z array for a string `str`, which `z[i]` stores the length of the longest common prefix of `str` and `str[i..]`. See [geeksforgeeks](https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/) and [codeforces](https://codeforces.com/blog/entry/3107) for more explanation.
 
-Notice the `z[0]` is meaningless by its nature, in the code it's set to be `0`.
+Notice the `z[0]` is meaningless by its nature and set to be `0`.
 
 - `get_z_array(str)`
