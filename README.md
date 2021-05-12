@@ -18,12 +18,12 @@ bit.sum(j) - (i > 0 ? bit.sum(i) : 0)
 ```
 
 ## Directed Graph
-Methods for directed graphs. (`n` amount of vertices, `edges` array of direct edges e.g. `[[0,1],[1,2]]`.)
+Methods for directed graphs. (`n` is the amount of vertices indexed from `0` to `n - 1`, `edges` is an array of direct edges e.g. `[[0,1],[1,2]]`.)
 
 - `dfs_traverse(n, edges)` to DFS-traverse in a graph.
-- `get_topological_order(n, edges)` to get a valid topological order.
-- `is_cyclic?(n, edges)` to detect if it is a cyclic graph.
-
+- `topological_sort(n, edges)` to get a valid topological order.
+- `is_cyclic?(n, edges)` to detect if the graph is a cyclic graph.
+- `is_bipartite?(n, edges)` to detect if the graph is [bipartite](https://en.wikipedia.org/wiki/Bipartite_graph).
 
 ## Disjoint Set
 A disjoint set (aka union find) of N nodes.
@@ -48,7 +48,7 @@ p (0...6).group_by{|i| ds.find(i)}.values # [[0, 1, 4], [2, 5], [3]]
 A priority queue for getting the minimum element in log N time.
 
 - `#size`
-- `#insert(element)` to insert any object to the priority queue.
+- `#push(e)` to insert any object to the priority queue.
 - `#top` to get the top element, this will not pop the element.
 - `#pop` to pop and return the top element.
 
@@ -92,7 +92,7 @@ A red-black tree for key-sorted key-value pairs. Methods below are similar to `H
 - `#to_a`, `#to_h`, `#to_s`
 - `#each(&block)`
 - `#invert`
-- `#shift`
+- `#first`, `#shift`
 
 ## Z Algorithm
 Z algorithm calculates Z array for a string `str`, which `z[i]` stores the length of the longest common prefix of `str` and `str[i..]`. See [geeksforgeeks](https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/) and [codeforces](https://codeforces.com/blog/entry/3107) for more explanation.

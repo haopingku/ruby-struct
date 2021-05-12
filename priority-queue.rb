@@ -7,15 +7,15 @@ class PriorityQueue
     @a.size
   end
 
-  def insert o
-    @a.push(o)
+  def push e
+    @a.push(e)
     i = @a.size - 1
     while i > 0 && comp(i, j = (i - 1) / 2)
       i = swap(i, j)
     end
     self
   end
-  alias << insert
+  alias << push
 
   def top
     @a[0]

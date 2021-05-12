@@ -15,6 +15,10 @@ class SegmentTree
   end
 
   def query q
+    if !q.is_a?(Range)
+      raise(ArgumentError, "query should be Range (got #{q}).")
+    end
+
     query_i(0, @z - 1, @z, q.begin + @z - 1, q.size)
   end
 

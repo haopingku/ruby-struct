@@ -134,6 +134,13 @@ class SortedHash
     end
   end
 
+  def first
+    if @root != NIL_NODE
+      n = tree_minimum(@root)
+      [n.key, n.value]
+    end
+  end
+
   private def find_node n, key
     while n != NIL_NODE
       c = key <=> n.key
