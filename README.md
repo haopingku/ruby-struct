@@ -62,9 +62,9 @@ while i = q.pop; p -i; end # print in decreasing order
 ```
 
 ## Segment Tree
-[Segment tree](https://en.wikipedia.org/wiki/Segment_tree) for updating and range query in log time complexity.
+[Segment tree](https://en.wikipedia.org/wiki/Segment_tree) for updating elements and querying in log time complexity.
 
-- `#initialize(size, init_value = 0, &merge = nil)` to initialize a segment tree, `merge` is defaulted to sum function. `merge` is called when merging two children nodes to their parent node.
+- `#initialize(size, init_value = 0, &merge = nil)` to initialize a segment tree. `init_val` should be the [identity element](https://en.wikipedia.org/wiki/Group_(mathematics)) of the merge (combine) function, i.e. merge(a, i) ==  merge(i, a) == a. Like 0 for sum and infinity for minimun. `merge` function is defaulted to be sum, and is called when merging two children nodes to their parent node.
 - `#update(index, value)` to update a value in `index`.
 - `#query(range)` to query a result (range is in `Range` class).
 

@@ -1,11 +1,15 @@
 class SegmentTree
   def initialize n, init_val = 0, &merge
-    @n, @z, @a = n, 1, Array.new(4 * n, init_val)
+    @n, @z = n, 2 ** Math.log2(n).ceil
     @merge = merge || ->(i, j){ i + j }
-    while @z < n; @z *= 2; end
+    @a = Array.new(2 * @z - 1, init_val)
   end
 
   def update i, v
+    if !(0 <= i && i < @n)
+      raise(ArgumentError, "not in (0...#{@n}), got #{i}.")
+    end
+
     @a[i += @z - 1] = v
     while i > 0
       pi = (i - 1) / 2
@@ -16,14 +20,14 @@ class SegmentTree
 
   def query q
     if !q.is_a?(Range)
-      raise(ArgumentError, "query should be Range (got #{q}).")
+      raise(TypeError, "not an instance of Range, got #{q}.")
     end
 
     query_i(0, @z - 1, @z, q.begin + @z - 1, q.size)
   end
 
   private def query_i i, si, sz, qi, qz
-    if sz == 0 || qz == 0
+    if sz == 0
       nil
     elsif qi <= si && si + sz <= qi + qz
       @a[i]
