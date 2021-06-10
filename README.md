@@ -94,6 +94,34 @@ A red-black tree for key-sorted key-value pairs. Methods below are similar to `H
 - `#invert`
 - `#first`, `#shift`
 
+Methods return iterator.
+
+- `#first_iter`
+- `#last_iter`
+- `#bsearch_iter(&block)` to get the binary searched iterator, the usage is the same as `bsearch` with parameter `(key, value)`.
+
+### SortedHash::Iterator
+Iterators that can get the key/value of a node and iterate in the Hash.
+
+- `#key`
+- `#value`
+- `#predecessor`
+- `#successor`
+
+### Example
+
+```ruby
+a = SortedHash.new
+a[10], a[14], a[12], a[11] = 0, 0, 0, 0
+
+it = a.bsearch_iter{|k, v| k >= 10.5}
+p it.key # 11
+p (it = it.successor)&.key # 12
+p (it = it.predecessor)&.key # 11
+p (it = it.predecessor)&.key # 10
+p (it = it.predecessor)&.key # nil
+```
+
 ## Z Algorithm
 Z algorithm calculates Z array for a string `str`, which `z[i]` stores the length of the longest common prefix of `str` and `str[i..]`. See [geeksforgeeks](https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/) and [codeforces](https://codeforces.com/blog/entry/3107) for more explanation.
 

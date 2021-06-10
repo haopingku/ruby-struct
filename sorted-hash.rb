@@ -14,11 +14,32 @@ class SortedHash
 
   class Node
     attr_reader :key
-    attr_accessor :value, :p, :left, :right, :color
-    def initialize key, value
-      @key, @value = key, value
+    attr_accessor :val, :p, :left, :right, :color
+    def initialize key, val
+      @key, @val = key, val
       @p, @left, @right = NIL_NODE, NIL_NODE, NIL_NODE
       @color = RED
+    end
+  end
+
+  class Iterator
+    def initialize node, sh
+      @node, @sh = node, sh
+    end
+
+    def key; @node.key; end
+    def value; @node.val; end
+
+    def predecessor
+      if @node = @sh.send(:predecessor, @node)
+        self
+      end
+    end
+
+    def successor
+      if @node = @sh.send(:successor, @node)
+        self
+      end
     end
   end
 
@@ -48,14 +69,14 @@ class SortedHash
     end
   end
 
-  def []= key, value
+  def []= key, val
     if n = find_node(@root, key)
-      n.value = value
+      n.val = val
     else
-      insert(n = Node.new(key, value))
+      insert(n = Node.new(key, val))
       @size += 1
     end
-    value
+    val
   end
 
   def delete key
@@ -66,7 +87,7 @@ class SortedHash
         delete_node(n)
       end
       @size -= 1
-      n.value
+      n.val
     elsif block_given?
       yield key
     end
@@ -81,8 +102,8 @@ class SortedHash
     map{|k, | k}
   end
 
-  def key value
-    find{|k, v| v == value}&.at[0]
+  def key val
+    find{|k, v| v == val}&.at(0)
   end
 
   def values
@@ -108,7 +129,7 @@ class SortedHash
     n = @root == NIL_NODE ? nil : tree_minimum(@root)
     e = Enumerator.new do |i|
       while n
-        i << [n.key, n.value]
+        i << [n.key, n.val]
         n = successor(n)
       end
     end
@@ -121,7 +142,7 @@ class SortedHash
   end
 
   def invert
-    h = self.class.new(@default, &@default_proc)
+    h = new(@default, &@default_proc)
     each{|k, v| h[v] = k }
     h
   end
@@ -130,14 +151,40 @@ class SortedHash
     if @root != NIL_NODE
       n = tree_minimum(@root)
       delete_node(n)
-      [n.key, n.value]
+      [n.key, n.val]
     end
   end
 
   def first
     if @root != NIL_NODE
       n = tree_minimum(@root)
-      [n.key, n.value]
+      [n.key, n.val]
+    end
+  end
+
+  def last
+    if @root != NIL_NODE
+      n = tree_maximum(@root)
+      [n.key, n.val]
+    end
+  end
+
+  def first_iter
+    if @root != NIL_NODE
+      Iterator.new(tree_minimum(@root), self)
+    end
+  end
+
+  def last_iter
+    if @root != NIL_NODE
+      Iterator.new(tree_maximum(@root), self)
+    end
+  end
+
+  def bsearch_iter &b
+    if @root != NIL_NODE
+      n = bsearch_util(@root, b)
+      n == NIL_NODE ? nil : Iterator.new(n, self)
     end
   end
 
@@ -159,11 +206,29 @@ class SortedHash
     n
   end
 
+  private def tree_maximum n
+    while n.right != NIL_NODE
+      n = n.right
+    end
+    n
+  end
+
   private def successor n
     if n.right != NIL_NODE
       tree_minimum(n.right)
     else
       while n.p != NIL_NODE && n == n.p.right
+        n = n.p
+      end
+      n.p != NIL_NODE ? n.p : nil
+    end
+  end
+
+  private def predecessor n
+    if n.left != NIL_NODE
+      tree_maximum(n.left)
+    else
+      while n.p != NIL_NODE && n == n.p.left
         n = n.p
       end
       n.p != NIL_NODE ? n.p : nil
@@ -358,5 +423,16 @@ class SortedHash
       end
     end
     x.color = BLACK
+  end
+
+  private def bsearch_util n, b
+    if n == NIL_NODE
+      NIL_NODE
+    elsif b.(n.key, n.val)
+      r = bsearch_util(n.left, b)
+      r != NIL_NODE ? r : n
+    else
+      bsearch_util(n.right, b)
+    end
   end
 end
