@@ -73,7 +73,7 @@ class SortedHash
     if n = find_node(@root, key)
       n.val = val
     else
-      insert(n = Node.new(key, val))
+      insert(Node.new(key, val))
       @size += 1
     end
     val
@@ -103,7 +103,7 @@ class SortedHash
   end
 
   def key val
-    find{|k, v| v == val}&.at(0)
+    find{|_, v| v == val}&.at(0)
   end
 
   def values
